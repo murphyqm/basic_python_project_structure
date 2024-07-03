@@ -1,13 +1,70 @@
 import streamlit as st
+import re
 
-st.title('SWD3: Basic Python Project Structure')
+st.title('Basic Python Project Structure')
 
-st.write('Expand the tab to the left to input your project details. The code snippets below will update with your choices.')
+st.write("This webapp creates customised code snippets to help you set up a Python package project.",
+"First, look through the **Picking a project name** tab and decide on a name for your Python package.",
+"Then, go to the **Project details** tab and fill in information for your project.",
+"Then, you can generate a sensible project folder structure using the `bash` scripts in the tab **Folder Structure**.",
+"You can build your Python package using the generated `pyproject.toml` template in the **pyproject.toml** tab." )
 
-with st.sidebar:
-    st.header("Fill in your details here")
+font_css = """
+<style>
+button[data-baseweb="tab"] > div[data-testid="stMarkdownContainer"] > p {
+  font-size: 18px;
+}
+</style>
+"""
 
-    project_name = st.text_input("Enter your package name (letters, number and underscores only!):", "example_package")
+st.markdown("""
+<style>
+
+	.stTabs [data-baseweb="tab-list"] {
+		gap: 5px;
+    }
+
+	.stTabs [data-baseweb="tab"] {
+		height: 50px;
+        white-space: pre-wrap;
+		background-color: #F0F2F6;
+		border-radius: 4px 4px 0px 0px;
+		gap: 5px;
+		padding-top: 10px;
+		padding-bottom: 10px;
+    }
+
+	.stTabs [aria-selected="true"] {
+  		background-color: #FFFFFF;
+	}
+
+</style>""", unsafe_allow_html=True)
+
+st.write(font_css, unsafe_allow_html=True)
+
+tablist = ["\u2001 Picking a project name \u2001", "\u2001 Project details \u2001", "\u2001 Folder structure \u2001", "\u2001 pyproject.toml \u2001"]
+
+intro, tab0, tab1, tab2 = st.tabs(tablist)
+
+with intro:
+    st.write("Basic information on picking a project name.")
+    st.markdown(
+        """
+        Picking a sensible project and package name can be challenging. There are a few rules to follow:
+        - For your Python package name, stick to just lowercase letters and underscores. No spaces! No hyphens!
+        - Make your repository name for the project the same as the package name, again all lowercase, but use hyphens instead of underscores. This is not a rule, but is a nice [convention](https://github.com/GoldenbergLab/naming-and-documentation-conventions)]
+        - If you plan on publishing your package on PyPI (so you can install with pip), check that there are no packages with the same name!
+        """
+        )
+    test_name = st.text_input("Test your name here:", "package_name")
+
+    if re.search(r"\s", test_name):
+        st.write("Remove spaces!")
+    if re.search(r"-", test_name):
+        st.write("Remove hyphens!")
+
+with tab0:
+    project_name = st.text_input("Enter your package name (lowercase letters and underscores only!):", "example_package")
 
     author_name = st.text_input("Enter the author's full name:", "Author Full Name")
 
@@ -18,10 +75,6 @@ with st.sidebar:
     description = st.text_input("Enter a very brief project description:", "A simple Python project")
 
     st.write("By default, we have used the MIT license in the `pyproject.toml` file; you can change this by swapping to one of the other common licenses [here](https://pypi.org/classifiers/) or by instead including a license file in your repository.")
-
-tablist = ["Folder structure", "pyproject.toml"]
-
-tab1, tab2 = st.tabs(tablist)
 
 with tab1:
 
