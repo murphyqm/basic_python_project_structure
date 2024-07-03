@@ -75,14 +75,14 @@ with tab2:
     authors = [
     {{ name="{author_name}", email="{author_email}" }},
     ]
-    requires-python = ">=3.8"
+    requires-python = ">=3.10"
     classifiers = [
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ]
     dependencies = [
-        "numpy==1.21.2",
+        "numpy>=1.21.2",
     ]
 
     [project.optional-dependencies]
