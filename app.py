@@ -1,12 +1,21 @@
 import streamlit as st
 
-st.title('SWD3: Basic Python Project Structure')
+st.title('Basic Python Project Structure')
 
-st.write('Expand the tab to the left to input your project details. The code snippets below will update with your choices.')
+st.write("This webapp creates customised code snippets to help you set up a Python package project.",
+"First, look through the **Picking a project name** tab and decide on a name for your Python package.",
+"Then, go to the **Project details** tab and fill in information for your project.",
+"Then, you can generate a sensible project folder structure using the `bash` scripts in the tab **Folder Structure**.",
+"You can build your Python package using the generated `pyproject.toml` template in the **pyproject.toml** tab." )
 
-with st.sidebar:
-    st.header("Fill in your details here")
+tablist = ["Picking a project name", "Project details", "Folder structure", "pyproject.toml"]
 
+intro, tab0, tab1, tab2 = st.tabs(tablist)
+
+with intro:
+    st.write("Basic information on picking a project name.")
+
+with tab0:
     project_name = st.text_input("Enter your package name (letters, number and underscores only!):", "example_package")
 
     author_name = st.text_input("Enter the author's full name:", "Author Full Name")
@@ -18,10 +27,6 @@ with st.sidebar:
     description = st.text_input("Enter a very brief project description:", "A simple Python project")
 
     st.write("By default, we have used the MIT license in the `pyproject.toml` file; you can change this by swapping to one of the other common licenses [here](https://pypi.org/classifiers/) or by instead including a license file in your repository.")
-
-tablist = ["Folder structure", "pyproject.toml"]
-
-tab1, tab2 = st.tabs(tablist)
 
 with tab1:
 
