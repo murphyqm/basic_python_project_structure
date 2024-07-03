@@ -1,4 +1,5 @@
 import streamlit as st
+import re
 
 st.title('Basic Python Project Structure')
 
@@ -47,9 +48,23 @@ intro, tab0, tab1, tab2 = st.tabs(tablist)
 
 with intro:
     st.write("Basic information on picking a project name.")
+    st.markdown(
+        """
+        Picking a sensible project and package name can be challenging. There are a few rules to follow:
+        - For your Python package name, stick to just lowercase letters and underscores. No spaces! No hyphens!
+        - Make your repository name for the project the same as the package name, again all lowercase, but use hyphens instead of underscores. This is not a rule, but is a nice [convention](https://github.com/GoldenbergLab/naming-and-documentation-conventions)]
+        - If you plan on publishing your package on PyPI (so you can install with pip), check that there are no packages with the same name!
+        """
+        )
+    test_name = st.text_input("Test your name here:", "package_name")
+
+    if re.search(r"\s", test_name):
+        st.write("Remove spaces!")
+    if re.search(r"-", test_name):
+        st.write("Remove hyphens!")
 
 with tab0:
-    project_name = st.text_input("Enter your package name (letters, number and underscores only!):", "example_package")
+    project_name = st.text_input("Enter your package name (lowercase letters and underscores only!):", "example_package")
 
     author_name = st.text_input("Enter the author's full name:", "Author Full Name")
 
