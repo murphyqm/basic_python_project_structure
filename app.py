@@ -160,3 +160,10 @@ with tab2:
     st.code(toml_snippet, language='toml')
 
     st.write("This file contains metadata about your project, such as the name, version, and author. It also specifies the required Python version and any dependencies your project may have. You might need to add to this, or change/add dependencies. We have added a specific version of `numpy` and `pytest` to demonstrate the syntax. You can find more information about the `pyproject.toml` file [here](https://setuptools.pypa.io/en/latest/userguide/declarative_config.html).")
+
+with st.sidebar:
+
+    st.header("About")
+    st.write("This webapp was developed by [murphyqm](https://github.com/murphyqm) as part of the course materials for the",
+    "[*SWD3: Software development in Python*](https://arc.leeds.ac.uk/training/courses/swd3/) course run by the [Research Computing Team](https://arc.leeds.ac.uk/about/team/) at the University of Leeds.")
+    st.write("Find out more about [Research Computing](https://arc.leeds.ac.uk/) at Leeds.")
