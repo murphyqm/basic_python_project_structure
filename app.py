@@ -47,7 +47,7 @@ tablist = ["\u2001 Picking a project name \u2001", "\u2001 Project details \u200
 intro, tab0, tab1, tab2 = st.tabs(tablist)
 
 with intro:
-    st.write("Basic information on picking a project name.")
+    st.header("Basic information on picking a project name.")
     st.markdown(
         """
         Picking a sensible project and package name can be challenging. There are a few rules to follow:
@@ -62,9 +62,22 @@ with intro:
         st.write("Remove spaces!")
     if re.search(r"-", test_name):
         st.write("Remove hyphens!")
+    no_spaces = re.sub('\s+', '_', test_name)
+    no_hyphens = re.sub('-', '_', no_spaces)
+    just_hyphens = re.sub('_', '-', no_hyphens)
+
+    st.write(f"Your package name: `{no_hyphens}`")
+    st.write(f"Your repository (folder) name: `{just_hyphens}`")
 
 with tab0:
     project_name = st.text_input("Enter your package name (lowercase letters and underscores only!):", "example_package")
+    project_name = re.sub('\s+', '_', project_name)
+    project_name = re.sub('-', '_', project_name)
+
+    repo_name = re.sub('_', '-', project_name)
+
+    st.write(f"Your package name: `{project_name}`. If this doesn't look right, please change your input!")
+    st.write(f"You can call your git repository `{repo_name}` for consistency!")
 
     author_name = st.text_input("Enter the author's full name:", "Author Full Name")
 
@@ -79,7 +92,7 @@ with tab0:
 with tab1:
 
     folder_structure = f"""
-    your_git_repo/              This is the directory you are working in now!
+    {repo_name}/                This is the directory you are working in now!
     ├── src/  
     │   └── {project_name}/     
     │       ├── __init__.py      Makes the folder a package.
@@ -89,11 +102,11 @@ with tab1:
     └── README.md                README with information about the project.
 
     """
-    st.write("If `your_git_repo` is the root directory of your project, you might want a project structure that looks something like this:")
+    st.write(f"If `{repo_name}` is the root directory of your project, you might want a project structure that looks something like this:")
 
     st.code(folder_structure, language='text')
 
-    st.write('To recreate the structure above, `cd` into your project directory and run the following commands (by copying and pasting the block below into the terminal):')
+    st.write(f'To recreate the structure above, `cd` into your project directory (`{repo_name}`) and run the following commands (by copying and pasting the block below into the terminal):')
 
     str_chunk = f"""
     mkdir tests
