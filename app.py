@@ -9,45 +9,45 @@ st.write("This webapp creates customised code snippets to help you set up a Pyth
 "Then, you can generate a sensible project folder structure using the `bash` scripts in the tab **Folder Structure**.",
 "You can build your Python package using the generated `pyproject.toml` template in the **pyproject.toml** tab." )
 
-font_css = """
-<style>
-button[data-baseweb="tab"] > div[data-testid="stMarkdownContainer"] > p {
-  font-size: 18px;
-}
-</style>
-"""
+# font_css = """
+# <style>
+# button[data-baseweb="tab"] > div[data-testid="stMarkdownContainer"] > p {
+#   font-size: 18px;
+# }
+# </style>
+# """
 
-st.markdown("""
-<style>
+# st.markdown("""
+# <style>
 
-	.stTabs [data-baseweb="tab-list"] {
-		gap: 5px;
-    }
+# 	.stTabs [data-baseweb="tab-list"] {
+# 		gap: 5px;
+#     }
 
-	.stTabs [data-baseweb="tab"] {
-		height: 50px;
-        white-space: pre-wrap;
-		background-color: #F0F2F6;
-		border-radius: 4px 4px 0px 0px;
-		gap: 5px;
-		padding-top: 10px;
-		padding-bottom: 10px;
-    }
+# 	.stTabs [data-baseweb="tab"] {
+# 		height: 50px;
+#         white-space: pre-wrap;
+# 		background-color: #F0F2F6;
+# 		border-radius: 4px 4px 0px 0px;
+# 		gap: 5px;
+# 		padding-top: 10px;
+# 		padding-bottom: 10px;
+#     }
 
-	.stTabs [aria-selected="true"] {
-  		background-color: #FFFFFF;
-	}
+# 	.stTabs [aria-selected="true"] {
+#   		background-color: #FFFFFF;
+# 	}
 
-</style>""", unsafe_allow_html=True)
+# </style>""", unsafe_allow_html=True)
 
-st.write(font_css, unsafe_allow_html=True)
+# st.write(font_css, unsafe_allow_html=True)
 
 tablist = ["\u2001 Picking a project name \u2001", "\u2001 Project details \u2001", "\u2001 Folder structure \u2001", "\u2001 pyproject.toml \u2001"]
 
 intro, tab0, tab1, tab2 = st.tabs(tablist)
 
 with intro:
-    st.write("Basic information on picking a project name.")
+    st.header("Basic information on picking a project name.")
     st.markdown(
         """
         Picking a sensible project and package name can be challenging. There are a few rules to follow:
@@ -62,9 +62,22 @@ with intro:
         st.write("Remove spaces!")
     if re.search(r"-", test_name):
         st.write("Remove hyphens!")
+    no_spaces = re.sub('\s+', '_', test_name)
+    no_hyphens = re.sub('-', '_', no_spaces)
+    just_hyphens = re.sub('_', '-', no_hyphens)
+
+    st.write(f"Your package name: `{no_hyphens}`")
+    st.write(f"Your repository (folder) name: `{just_hyphens}`")
 
 with tab0:
     project_name = st.text_input("Enter your package name (lowercase letters and underscores only!):", "example_package")
+    project_name = re.sub('\s+', '_', project_name)
+    project_name = re.sub('-', '_', project_name)
+
+    repo_name = re.sub('_', '-', project_name)
+
+    st.write(f"Your package name: `{project_name}`. If this doesn't look right, please change your input!")
+    st.write(f"You can call your git repository `{repo_name}` for consistency!")
 
     author_name = st.text_input("Enter the author's full name:", "Author Full Name")
 
@@ -79,7 +92,7 @@ with tab0:
 with tab1:
 
     folder_structure = f"""
-    your_git_repo/              This is the directory you are working in now!
+    {repo_name}/                This is the directory you are working in now!
     ├── src/  
     │   └── {project_name}/     
     │       ├── __init__.py      Makes the folder a package.
@@ -89,11 +102,11 @@ with tab1:
     └── README.md                README with information about the project.
 
     """
-    st.write("If `your_git_repo` is the root directory of your project, you might want a project structure that looks something like this:")
+    st.write(f"If `{repo_name}` is the root directory of your project, you might want a project structure that looks something like this:")
 
     st.code(folder_structure, language='text')
 
-    st.write('To recreate the structure above, `cd` into your project directory and run the following commands (by copying and pasting the block below into the terminal):')
+    st.write(f'To recreate the structure above, `cd` into your project directory (`{repo_name}`) and run the following commands (by copying and pasting the block below into the terminal):')
 
     str_chunk = f"""
     mkdir tests
@@ -147,3 +160,10 @@ with tab2:
     st.code(toml_snippet, language='toml')
 
     st.write("This file contains metadata about your project, such as the name, version, and author. It also specifies the required Python version and any dependencies your project may have. You might need to add to this, or change/add dependencies. We have added a specific version of `numpy` and `pytest` to demonstrate the syntax. You can find more information about the `pyproject.toml` file [here](https://setuptools.pypa.io/en/latest/userguide/declarative_config.html).")
+
+with st.sidebar:
+
+    st.header("About")
+    st.write("This webapp was developed by [murphyqm](https://github.com/murphyqm) as part of the course materials for the",
+    "[*SWD3: Software development in Python*](https://arc.leeds.ac.uk/training/courses/swd3/) course run by the [Research Computing Team](https://arc.leeds.ac.uk/about/team/) at the University of Leeds.")
+    st.write("Find out more about [Research Computing](https://arc.leeds.ac.uk/) at Leeds.")
