@@ -9,38 +9,38 @@ st.write("This webapp creates customised code snippets to help you set up a Pyth
 "Then, you can generate a sensible project folder structure using the `bash` scripts in the tab **Folder Structure**.",
 "You can build your Python package using the generated `pyproject.toml` template in the **pyproject.toml** tab." )
 
-font_css = """
-<style>
-button[data-baseweb="tab"] > div[data-testid="stMarkdownContainer"] > p {
-  font-size: 18px;
-}
-</style>
-"""
+# font_css = """
+# <style>
+# button[data-baseweb="tab"] > div[data-testid="stMarkdownContainer"] > p {
+#   font-size: 18px;
+# }
+# </style>
+# """
 
-st.markdown("""
-<style>
+# st.markdown("""
+# <style>
 
-	.stTabs [data-baseweb="tab-list"] {
-		gap: 5px;
-    }
+# 	.stTabs [data-baseweb="tab-list"] {
+# 		gap: 5px;
+#     }
 
-	.stTabs [data-baseweb="tab"] {
-		height: 50px;
-        white-space: pre-wrap;
-		background-color: #F0F2F6;
-		border-radius: 4px 4px 0px 0px;
-		gap: 5px;
-		padding-top: 10px;
-		padding-bottom: 10px;
-    }
+# 	.stTabs [data-baseweb="tab"] {
+# 		height: 50px;
+#         white-space: pre-wrap;
+# 		background-color: #F0F2F6;
+# 		border-radius: 4px 4px 0px 0px;
+# 		gap: 5px;
+# 		padding-top: 10px;
+# 		padding-bottom: 10px;
+#     }
 
-	.stTabs [aria-selected="true"] {
-  		background-color: #FFFFFF;
-	}
+# 	.stTabs [aria-selected="true"] {
+#   		background-color: #FFFFFF;
+# 	}
 
-</style>""", unsafe_allow_html=True)
+# </style>""", unsafe_allow_html=True)
 
-st.write(font_css, unsafe_allow_html=True)
+# st.write(font_css, unsafe_allow_html=True)
 
 tablist = ["\u2001 Picking a project name \u2001", "\u2001 Project details \u2001", "\u2001 Folder structure \u2001", "\u2001 pyproject.toml \u2001"]
 
