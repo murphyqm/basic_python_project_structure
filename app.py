@@ -42,9 +42,9 @@ st.write("This webapp creates customised code snippets to help you set up a Pyth
 
 # st.write(font_css, unsafe_allow_html=True)
 
-tablist = ["\u2001 Picking a project name \u2001", "\u2001 Project details \u2001", "\u2001 Folder structure \u2001", "\u2001 pyproject.toml \u2001"]
+tablist = ["\u2001 Picking a project name \u2001", "\u2001 Project details \u2001", "\u2001 Folder structure \u2001", "\u2001 pyproject.toml \u2001", "\u2001 Build docs \u2001"]
 
-intro, tab0, tab1, tab2 = st.tabs(tablist)
+intro, tab0, tab1, tab2, tab3 = st.tabs(tablist)
 
 with intro:
     st.header("Basic information on picking a project name.")
@@ -97,7 +97,8 @@ with tab1:
     │   └── {project_name}/     
     │       ├── __init__.py      Makes the folder a package.
     │       └── source.py        An example module containing source code.
-    ├── tests/  
+    ├── tests/
+    |   ├── __init__.py          Sets up the test suite.
     │   └── test_source.py       A file containing tests for the code in source.py.
     └── README.md                README with information about the project.
 
@@ -108,18 +109,30 @@ with tab1:
 
     st.write(f'To recreate the structure above, `cd` into your project directory (`{repo_name}`) and run the following commands (by copying and pasting the block below into the terminal):')
 
+    # str_chunk = f"""
+    # mkdir tests
+    # mkdir src
+    # touch pyproject.toml
+    # touch README.md
+    # cd src
+    # mkdir {project_name}
+    # cd {project_name}
+    # touch __init__.py
+    # touch source.py
+    # cd ../.. 
+    # """
+
     str_chunk = f"""
-    mkdir tests
-    mkdir src
-    touch pyproject.toml
-    touch README.md
-    cd src
-    mkdir {project_name}
-    cd {project_name}
-    touch __init__.py
-    touch source.py
-    cd ../.. 
-    """
+mkdir tests
+touch tests/__init__.py
+echo -e 'import sys\nsys.path.append("src")' > tests/__init__.py
+mkdir src/
+mkdir src/{project_name}/
+touch src/{project_name}/pyproject.toml
+touch src/{project_name}/README.md
+touch src/{project_name}/__init__.py
+touch src/{project_name}/source.py
+"""
 
     st.code(str_chunk, language='bash')
 
@@ -160,6 +173,67 @@ with tab2:
     st.code(toml_snippet, language='toml')
 
     st.write("This file contains metadata about your project, such as the name, version, and author. It also specifies the required Python version and any dependencies your project may have. You might need to add to this, or change/add dependencies. We have added a specific version of `numpy` and `pytest` to demonstrate the syntax. You can find more information about the `pyproject.toml` file [here](https://setuptools.pypa.io/en/latest/userguide/declarative_config.html).")
+
+with tab3:
+    st.write("[Mkdocs](https://www.mkdocs.org/) is a simple and quick documentation building library that works well with GitHub and GitHub pages.")
+
+    st.write("From the project folder (which holds you `pyproject.toml` file), from an environment with `mkdocs` and the required extra libraries installed",
+    "(see the suggested env yml at the bottom of the page to install `mkdocs` and the required extensions), you can quickly set up your docs:")
+    st.code("mkdocs new .", language="bash")
+    st.write("This will both create a `docs/` folder, and a `mkdocs.yml` file. Add the following to the `mkdocs.yml` file:")
+
+    mkdocs_snippet = f"""
+    site_name: {project_name} Documentation
+
+theme:
+  name: "material"
+
+plugins:
+- mkdocstrings:
+    handlers:
+      python:
+        paths: [src]  # search packages in the src folder
+
+nav:
+  - Index: index.md
+    """
+    st.code(mkdocs_snippet, language='yaml')
+    st.write("Then, within the `docs/` folder, you can edit the file `index.md` (or add additional markdown files), and add the following snippets:")
+
+    st.code(f"::: {project_name}")
+
+    st.write(f"This will include any documentation you have added to the `__init__.py` file in your `src/{project_name}/` folder.")
+
+    st.write("You can include your API reference by including the following snippet (updating `source` with whatever your python file in your package is called):")
+
+    st.code(f"::: {project_name}.source")
+
+    st.write("To preview your documentation, just run `TZ=UTC mkdocs serve` from the directory that contains the `mkdocs.yml`.",
+    "The `TZ=UTC` command is due to a timezone bug that causes the build to fail if not included.",
+    "When happy with your documentation, you can run `TZ=UTC mkdocs build` to create a folder of webpages, then `TZ=UTC mkdocs gh-deploy`",
+    "to publish these docs to GitHub. Note that you will have to enable GitHub pages, and provide actions with write permissions on your repository.",
+    "For more information, see [the wiki post here](https://github.com/murphyqm/python-project-template/wiki/mkdocs-workfow).")
+
+
+    st.subheader("Mkdocs env")
+    st.write("You can use the following env yml to install the required `mkdocs` packages to build the docs example above.")
+
+    mkdocs_package = """
+    name: mkdocs-env
+channels:
+  - defaults
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+    - mkdocs
+    - "mkdocstrings[python]"
+    - mkdocs-material
+    """
+
+    st.code(mkdocs_package, language="yaml")
+
+
 
 with st.sidebar:
 
