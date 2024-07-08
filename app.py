@@ -42,9 +42,9 @@ st.write("This webapp creates customised code snippets to help you set up a Pyth
 
 # st.write(font_css, unsafe_allow_html=True)
 
-tablist = ["\u2001 Picking a project name \u2001", "\u2001 Project details \u2001", "\u2001 Folder structure \u2001", "\u2001 pyproject.toml \u2001", "\u2001 Build docs \u2001"]
+tablist = ["Picking a project name", "Project details", "Folder structure", "pyproject.toml", " Build docs", "Citation"]
 
-intro, tab0, tab1, tab2, tab3 = st.tabs(tablist)
+intro, tab0, tab1, tab2, tab3, tab4 = st.tabs(tablist)
 
 with intro:
     st.header("Basic information on picking a project name.")
@@ -100,7 +100,8 @@ with tab1:
     ├── tests/
     |   ├── __init__.py          Sets up the test suite.
     │   └── test_source.py       A file containing tests for the code in source.py.
-    └── README.md                README with information about the project.
+    ├── README.md                README with information about the project.
+    └── CITATION.cff             Citation file that makes it easy for people to cite you!
 
     """
     st.write(f"If `{repo_name}` is the root directory of your project, you might want a project structure that looks something like this:")
@@ -128,8 +129,9 @@ touch tests/__init__.py
 echo -e 'import sys\nsys.path.append("src")' > tests/__init__.py
 mkdir src/
 mkdir src/{project_name}/
-touch src/{project_name}/pyproject.toml
-touch src/{project_name}/README.md
+touch pyproject.toml
+touch README.md
+touch CITATION.cff
 touch src/{project_name}/__init__.py
 touch src/{project_name}/source.py
 """
@@ -232,6 +234,13 @@ dependencies:
     """
 
     st.code(mkdocs_package, language="yaml")
+
+with tab4:
+    st.write("Creating a citation file in your repository makes it much easier for users of your code to attribute you correctly, in the manner you prefer.",
+    "Read about the `CITATION.ctf` format [here](https://citation-file-format.github.io/),",
+    "and use the citation file builder [here](https://citation-file-format.github.io/cff-initializer-javascript/#/) to generate a file for your repository.")
+
+    st.write("Once your repository contains a citation file, you can use this with the [GitHub-Zenodo integration](https://docs.github.com/en/repositories/archiving-a-github-repository/referencing-and-citing-content) when generating DOIs for your release.")
 
 
 
