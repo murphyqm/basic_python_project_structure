@@ -1,6 +1,24 @@
 import streamlit as st
 import re
 
+export_pip_version_numbers = """
+# Extract installed pip packages
+pip_packages=$(conda env export | grep -A9999 ".*- pip:" | grep -v "^prefix: ")
+
+# Export conda environment without builds, and append pip packages
+conda env export --from-history | grep -v "^prefix: " > new-environment.yml
+echo "$pip_packages" >> new-environment.yml
+"""
+
+export_pip_no_version_numbers = """
+# Extract installed pip packages
+pip_packages=$(conda env export | grep -A9999 ".*- pip:" | grep -v "^prefix: " | cut -f1 -d"=")
+
+# Export conda environment without builds, and append pip packages
+conda env export --from-history | grep -v "^prefix: " > new-environment.yml
+echo "$pip_packages" >> new-environment.yml
+"""
+
 st.title('Basic Python Project Structure')
 
 st.write("This webapp creates customised code snippets to help you set up a Python package project.",
@@ -8,6 +26,32 @@ st.write("This webapp creates customised code snippets to help you set up a Pyth
 "Then, go to the **Project details** tab and fill in information for your project.",
 "Then, you can generate a sensible project folder structure using the `bash` scripts in the tab **Folder Structure**.",
 "You can build your Python package using the generated `pyproject.toml` template in the **pyproject.toml** tab." )
+
+with st.expander("Click here to learn more about balancing `env.yml` files for development and `pyproject.toml` files for distributing code"):
+    st.subheader("Managing dependencies")
+    st.write("While developing your code, you may need other external Python packages, for example `numpy`, `matplotlib.pyplot`, or `scipy`. These are **dependencies**.",
+    "While developing your code, you can use the dependency manager of your choice, such as `conda`, and then export your dependencies",
+    "to an `environment.yml` file or a `requirements.txt` file.",
+    "You can then add these dependencies to your `pyproject.toml` file when you are ready to share the code.")
+    st.subheader("Example workflow using `conda`")
+    st.write("When writing your code, you should work in a virtual environment, in this case using conda.",
+    "First you should create an environment with the version of Python you need, and any initial packages you know you will require.")
+    st.code("conda create -n ENV-NAME python=3.12 numpy", language="bash")
+    st.write("Then, as needed, you can add packages (with the environment active):")
+    st.code("conda install pytest", language="bash")
+    st.write("When you are ready to package/release the code, you can export all your environments to an `environment.yml` file:")
+    st.code("conda env export --from-history > environment.yml # again, from inside the activated env", language="bash")
+    st.write("You can modify this file and remove packages that you were just using for development (for example, `pytest`).",
+    "You should test the environment works and you code can run by installing the env (you may need to change it's name):")
+    st.code("conda env create -f environment.yml", language="bash")
+    st.write("if you have installed packages with pip from inside your conda env, you will need to add a few steps to add these requirements.",
+    "[ekiwi111](https://github.com/conda/conda/issues/9628#issuecomment-1608913117) on GitHub provides the following code snippet:")
+    st.code(export_pip_version_numbers, language="bash")
+    st.write("For more flexibility in pip package versions, we can modify this to cut the pip version numbers out:")
+    st.code(export_pip_no_version_numbers, language="bash")
+    st.write("Read about when dependencies/requirements should be flexible vs. tight on [DeReLiCT](https://derelict.streamlit.app/).")
+    
+
 
 # font_css = """
 # <style>
